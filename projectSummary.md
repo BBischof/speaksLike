@@ -1,0 +1,51 @@
+# Rough project steps
+
+- I wget-ed all the articles from 2015 into a directory,
+- use find | grep | awk to create a list of paths to files, save list to var
+- loop over list of files and use cat | grep | sed to parse the files output to new files
+- loop over new files use cat to concatenate files with parts into single transcripts
+
+## Bash Commands Run
+- 
+```bash
+for j in $(seq -f "%02g" 12); do for i in $(seq -f "%02g" 31); do echo "http://www.whatthefolly.com/2015/$j/$i/" ; done; done | wget -r -np -nc -k -i -
+```
+- 
+```bash
+find . -name "*html" -type f -exec ls -l {} \; | awk '{print $9}' | grep -v "/feed" | grep -v "page" | awk -F "/" '{print $5}'
+```
+- 
+```bash 
+cat index.html | grep "<p>" | grep -v "Copyright" | grep -v "Category:" | grep -v "Log in" | grep -v "News Editor" | grep -v "span id" | grep -v ">…<" |  sed -e :a -e 's/<[^>]*>//g;/</N;//ba'
+```
+I ended up combining two and three into one script
+
+## Extracting and scrubbing the html to make individual files
+```
+find . -name "*html" -type f -exec ls -l {} \; | awk '{print $9}' | grep -v "/feed" | grep -v "page" | awk -F "/" '($5 != "index.html")' | grep "transcript" | while read filename; do 
+	name=`echo "$filename" | awk -F "/" '{print $5}'`
+	echo "$name"
+	cat "$filename" | grep "<p>" | grep -v "Copyright" | grep -v "Category:" | grep -v "Log in" | grep -v "News Editor" | grep -v "span id" | grep -v ">…<" |  sed -e :a -e 's/<[^>]*>//g;/</N;//ba' > "transcripts/${name}.txt"
+done
+
+```
+
+## Concatenating files that were broken into parts
+
+```
+find . -name "*txt" -type f -exec ls -l {} \; | grep "part" | grep -v "tax-scams" | grep -v "sunshine" | grep -v "pacific" | grep -v "state-department" | grep -v "d-c.txt" | awk '{print $9}' | while read filename; do
+ name=`echo "${filename:2}" | awk -F "-" '{for (i=1; i<(NF-2); i++) printf $i "-"; print $(NF-2)}'`
+ cat "$filename" >> "${name}.txt"
+done
+```
+
+I then just removed all files that were previously made of parts.
+
+## Putting Candidates into their own folders
+```
+for cand in "donald-trump" "carly-fiorina" "jeb-bush" "ben-carson" "chris-christie" "ted-cruz" "jim-gilmore" "lindsey-graham" "mike-huckabee" "john-kasich" "george-pataki" "rand-paul" "marco-rubio" "rick-santorum" "bernie-sanders" "hillary-clinton" "martin-omalley"
+do
+	mkdir ../${cand}
+	cp `ls | grep "transcript-${cand}s"` ../${cand}/
+done
+```
