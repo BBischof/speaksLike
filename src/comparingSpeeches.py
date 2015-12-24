@@ -1,5 +1,5 @@
 """
-Compare the speeches of GOP candidates.
+Compare the speeches of presidential candidates.
 @author - jverma
 """
 
@@ -8,14 +8,14 @@ import os
 import numpy as np 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
-from sklearn.meterics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import Normalizer
 
 
-class GOPspeeches:
+class candSpeeches:
 	"""
 	Implements the vector space model for computing the similarities of
-	the speeches of the GOP candidates. 
+	the speeches of the presidential candidates. 
 	Each document will be represented by a vector in a very
 	high dimensional vector space. The vectors have as entries the 
 	tf-idf scores of the n-grams.
@@ -35,9 +35,10 @@ class GOPspeeches:
 				contents = doc.read()
 				self.text.append(contents)
 
-	def compare(self, query, min_df=0, LSA=false, n_comp=None):
+
+	def compare(self, query, min_df=0, LSA=False, n_comp=None):
 		"""
-		Compare the GOP speeches with a query e.g. Hitler or Ford.
+		Compare the candidates speeches with a query e.g. Hitler or Ford.
 
 		Parameters
 		----------

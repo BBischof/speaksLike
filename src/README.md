@@ -1,6 +1,6 @@
 # Text Comparison
 
-Compare the GOP presidential candidate to other historical figures using a simple vector space model. 
+Compare the 2016 presidential candidates to other historical figures using a simple vector space model. 
 
 ## Input:
 
@@ -10,9 +10,9 @@ Compare the GOP presidential candidate to other historical figures using a simpl
 
 ## Usage:
 ```
-from comparingSpeeches import GOPspeeches
+from comparingSpeeches import candSpeeches
 
-results = GOPspeeches(input_directory)
+results = candSpeeches(input_directory)
 
 print results.compare(query.txt)
 ```
