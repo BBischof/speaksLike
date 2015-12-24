@@ -12,9 +12,9 @@ Compare the 2016 presidential candidates to other historical figures using a sim
 ```
 from comparingSpeeches import candSpeeches
 
-results = candSpeeches(input_directory)
+results = candSpeeches("input_directory")
 
-print results.compare(query.txt)
+print results.compare("query.txt")
 ```
 
 ## Requirements:
