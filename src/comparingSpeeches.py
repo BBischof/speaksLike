@@ -71,7 +71,7 @@ class candSpeeches:
 				X = Normalizer(copy=False).fit_transform(X)
 				queryVector = lsa.transform(queryVector)
 
-		ranking = cosine_similarity(X, query)
+		ranking = cosine_similarity(X, queryVector)
 		doc_id = np.argsort(ranking, axis=0)
 		doc_id = doc_id[::-1]
 		ranked_docs = [self.corpus[doc_id][0] for i in range(len(self.corpus))]
