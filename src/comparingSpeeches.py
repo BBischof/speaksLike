@@ -36,7 +36,7 @@ class candSpeeches:
 				self.text.append(contents)
 
 
-	def compare(self, query, min_df=0, LSA=False, n_comp=None):
+	def compare(self, query, min_df=2, LSA=False, n_comp=None):
 		"""
 		Compare the candidates speeches with a query e.g. Hitler or Ford.
 
@@ -58,11 +58,14 @@ class candSpeeches:
 		X = vectorizer.fit_transform(self.text)
 		X = X.toarray()
 
+		#print sum([y != 0 for y in X[0]])
+
 		queryData = open(query).read()
 		queryData = [queryData]
 		queryVector = vectorizer.transform(queryData)
 		queryVector = queryVector.toarray()
 
+		#print sum([y != 0 for y in queryVector])
 
 		if (LSA):
 			if (n_comp != None):
@@ -73,7 +76,9 @@ class candSpeeches:
 
 		ranking = cosine_similarity(X, queryVector)
 		doc_id = np.argsort(ranking, axis=0)
+		#print doc_id
 		doc_id = doc_id[::-1]
-		ranked_docs = [self.corpus[doc_id][0] for i in range(len(self.corpus))]
+		#print doc_id
+		ranked_docs = [self.corpus[doc_id[i][0]] for i in range(len(self.corpus))]
 
 		return ranked_docs
