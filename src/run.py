@@ -26,7 +26,7 @@ for text in compareList:
 
 	for i, transcript in enumerate(output):
 		if transcript in rankingsDict.keys():
-			rankingsDict[transcript].append(i)
+			rankingsDict[transcript].append(i+1)
 		else:
 			rankingsDict[transcript] = [i+1]
 	# 	if "hillary" in transcript:
@@ -45,7 +45,7 @@ for tran in rankingsDict.keys():
 	avgs[tran] = float(sum(rankingsDict[tran]))/len(rankingsDict[tran])
 sorteda = sorted(avgs.items(), key=operator.itemgetter(1))
 for x in sorteda:
-	print x
+	print "Doc:" + x[0][:-4] + ", AVG:" + str(x[1]) + ", List:" + str(rankingsDict[x[0]])
 
 
 #####
