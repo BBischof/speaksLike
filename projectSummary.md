@@ -52,4 +52,10 @@ done
 
 ## Analysis
 
-We begin by using tf-idf to create similarity vectors between each speech and Mein Kampf. We sort these similarity values--most similar to least--and return the list.  
+We begin by using tf-idf to create similarity vectors between each speech and a comparison text in the directory. We sort these similarity values--most similar to least--and return the list. 
+
+Next we iterate over all documents in the directory and generate these rankings for each. We average these rankings and return a sorted list(ascending) by similarity to the comparison texts.
+
+## Output
+
+A list of text documents from different candidates ranked by average tf-idf distance to a set of text documents from a directory.

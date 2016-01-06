@@ -6,10 +6,11 @@ import operator
 if len(sys.argv) >= 2:
 	args = sys.argv
 	#print args[1]
-	comparisonLocation = args[1]
+	comparisonLocation = args[2]
 	compareList = glob.glob(comparisonLocation + "*.txt")
+	transcripts = args[1]
 
-results = candSpeeches("allTranscripts")
+results = candSpeeches(transcripts)
 
 rankingsDict = {}
 
@@ -27,7 +28,7 @@ for text in compareList:
 		if transcript in rankingsDict.keys():
 			rankingsDict[transcript].append(i)
 		else:
-			rankingsDict[transcript] = [i]
+			rankingsDict[transcript] = [i+1]
 	# 	if "hillary" in transcript:
 	# 		hil += i
 	# 		hilCount +=1

@@ -38,7 +38,17 @@ benchmark.txt
 
 Note that we can also remove a document from input_directory and pass that as our benchmark.txt argument for purpose of self-similarity measurement.
 
+## Output:
+
+A sorted list of speeches and their rankings in tf-idf distance to the set of comparison texts.
+
 ## Usage:
+Usage of run.py:
+```
+python run.py name-of-directory-containing-speeches name-of-directory-containing-comparison-texts
+```
+
+Usage of comparingSpeeches:
 ```
 from comparingSpeeches import candSpeeches
 
