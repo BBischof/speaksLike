@@ -42,6 +42,8 @@ Note that we can also remove a document from input_directory and pass that as ou
 
 A sorted list of speeches and their rankings in tf-idf distance to the set of comparison texts.
 
+Output format is a list of texts included as comparison texts, followed by a list of lines where each line corresponds to an article, it's average ranking of comparison to the comparison texts, and the individual rankings to each comparison text.
+
 ## Usage:
 Usage of run.py:
 ```
