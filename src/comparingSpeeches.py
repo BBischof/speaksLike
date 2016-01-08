@@ -44,7 +44,7 @@ class candSpeeches:
 		----------
 		query: path to the textual document. e.g. hitler.txt
 		min_df: only terms with document frequency greater than
-				min_df will be considered. Default is 0.
+				min_df will be considered. Default is 2.
 		LSA: If True, the vectors will be mapped to a lower
 			dimensional 'concept' space using Latend Semantic Analysis.
 		n_comp: Number of components for the LSA, dimension of the concept space.
