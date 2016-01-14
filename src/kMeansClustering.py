@@ -35,7 +35,7 @@ class CandClusters:
 				self.text.append(contents)
 
 
-	def cluster(self, min_df=2, k=10, max_iter=300, n_init=1):
+	def cluster(self, min_df=2, k=19, max_iter=300, n_init=1):
 		"""
 		CLusters the candidate speeches using k-means algorithm.
 
@@ -62,7 +62,11 @@ class CandClusters:
 
 		km = KMeans(n_clusters=k, init='k-means++', max_iter=max_iter, n_init=n_init)
 		km.fit(X)
-		return km.labels_
+		clusters = km.labels_.tolist()
+		#return km.inertia_
+		#return km.labels_
+		return clusters
+
 
 
 
