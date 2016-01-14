@@ -65,7 +65,11 @@ class CandClusters:
 		clusters = km.labels_.tolist()
 		#return km.inertia_
 		#return km.labels_
-		return clusters
+		#return clusters, self.corpus
+		zippy = []
+		for x,y in zip(self.corpus, clusters):
+			zippy.append((x,y))
+		return zippy
 
 
 

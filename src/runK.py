@@ -3,6 +3,7 @@ from kMeansClustering import CandClusters
 import sys
 import glob
 import operator
+import json
 
 #read from command line
 if len(sys.argv) >= 2:
@@ -15,12 +16,15 @@ output = results.cluster()
 
 clusters = {}
 
-print output
+#print output
 
 for i in output:
-	if i in clusters.keys():
-		clusters[i] +=1
+	if i[1] in clusters.keys():
+		clusters[i[1]][0] +=1
+		clusters[i[1]][1].append(i[0])
 	else:
-		clusters[i] = 1
+		clusters[i[1]] = [1, [i[0]]]
 
-print clusters
+#print clusters
+
+print json.dumps(clusters, sort_keys=True, indent=4)
