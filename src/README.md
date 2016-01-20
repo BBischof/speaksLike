@@ -27,6 +27,22 @@ The output of the above calculation, are vectors. To rank by similarity, we use 
 
 Simply ranking the documents by TF-IDF cosine similarity is fairly primitive. It says nothing about the aggregate similarity of a candidate's rhetoric to the archive of comparison texts. To look at them simultaneously, one can use K-means clustering. One can think of this as asking "can we group documents by how similar they all are to one another?" One would expect that each candidate would have their own cluster, and so would the archive of comparison texts(corresponding to the person being compared to.) Additionally, one would expect the distance between clusters to indicate the similarity of candidates rhetoric. Again, we rely on TF-IDF to provide us with a distance function.
 
+To determine K we rely on two statistics and a comparison between them:
+- Gap Statistic 
+- Pham Et. Al. [Ref](https://datasciencelab.wordpress.com/2014/01/21/selection-of-k-in-k-means-clustering-reloaded/)
+
+The purpose of these statistics is to provide a guide for selecting the number of clusters for our analysis. In this case, the clusters will be the groupings of speeches. One might expect that given 19 speakers, we would want k=19. While this makes intuitive sense, it is a bit naive. To provide any real assessment of the candidate's "similarity to Hitler" we would expect that as the number of clusters decreases, one--or a few--candidates speeches overwhelmingly cluster together with Hitler's.
+
+## Principle Component Analysis
+
+Because of the high dimensionality of our representations(TF-IDF is extremely high dimensional), we have interest in dimensional reduction. One strategy for this is PCA. By utilizing PCA, we can project our high dimensional vectors onto a plane(2-dimensional subspace) which most accurately represents the variability in the data set. 
+
+With the lower dimensional representations, we have two advantages:
+- ability to visualize
+- potential for more concentrated datapoints
+
+High dimensional data is notorious for providing misleading clustering results(cf. curse of dimensionality), so we may see more defined clusters by utilizing K-means after PCA. Additionally, by projecting to two or three dimensions, we can plot the data points so that we can attempt to manually inspect the relationships.
+
 ## Input:
 
 ```
