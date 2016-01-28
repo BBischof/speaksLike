@@ -6,15 +6,15 @@
 - loop over new files use cat to concatenate files with parts into single transcripts
 
 ## Bash Commands Run
-- 
+- (note, this command needs slight modification to run now, some of the directory structure on whatthefolly has changed)
 ```bash
 for j in $(seq -f "%02g" 12); do for i in $(seq -f "%02g" 31); do echo "http://www.whatthefolly.com/2015/$j/$i/" ; done; done | wget -r -np -nc -k -i -
 ```
-- 
+- (now depricated in favor of the below)
 ```bash
 find . -name "*html" -type f -exec ls -l {} \; | awk '{print $9}' | grep -v "/feed" | grep -v "page" | awk -F "/" '{print $5}'
 ```
-- 
+- (now depricated in favor of the below)
 ```bash 
 cat index.html | grep "<p>" | grep -v "Copyright" | grep -v "Category:" | grep -v "Log in" | grep -v "News Editor" | grep -v "span id" | grep -v ">…<" |  sed -e :a -e 's/<[^>]*>//g;/</N;//ba'
 ```
@@ -29,7 +29,7 @@ find . -name "*html" -type f -exec ls -l {} \; | awk '{print $9}' | grep -v "/fe
 done
 
 ```
-
+(Note that `{print $5}' may not work depending on you personal directory structure. This should be modified to accomidate what is returned from the previous script. I'm too lazy to make all these commands more cohesive and extendible, but the basics are all here if someone wants to recreate this. Also, you could just grab the data from this repo...)
 ## Concatenating files that were broken into parts
 
 ```bash
