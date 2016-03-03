@@ -43,17 +43,57 @@ D(Cl_1, Cl_2)=(\sum_{a,b}^{I} |D^1(s_a, s_b)-D^2(s_a,s_b)|)/|I|
 
 This is the percentage of the relationships that have changed.
 
-#### Proof
-(Bryan to do)
-Given 
+#### Proof/Explanation
+
+Notice that one can consider a clustering as a partition of the set of `n` data points. If we think of it this way, define the `adjacency matrix of a cluster` as the `nxn` binary matrix with ones in the `i,j`'th entry iff `i` and `j` are in the same partition component(for `i!=j`). For `C` a clustering call its adjacency matrix `A(C)`.
+
+Then 
+
+```
+D(Cl_1, Cl_2)=|A(Cl_1)-A(Cl_2)|/2n
+```
 
 #### Write a py function to compute
-(Bryan to do)
-I'll do this
+(Done)
 
-#### A criticism of this
+We naively represent partitions as dictionaries of lists, the `i`th partition component has key `i` and value equal to a list of contained points.
 
-This metric does not take into consideration the changing of number of clusters. It does, but it overemphasizes them.
+e.g.
+```
+C_1 = {1: [1,2,3], 2: [4]}
+```
+
+Then our functions to convert a clustering into a matrix.
+
+```
+def buildClusterMatrix(D, size=-1):
+	count = sum(len(v) for v in D.itervalues())
+	A = []
+	for i in range(count):
+		A.append([0]*count)
+	for k in D.keys():
+		for p in list(itertools.combinations(D[k],2)):
+			A[p[0]-1][p[1]-1]=1
+			A[p[1]-1][p[0]-1]=1
+	return A
+```
+
+and to compute the distance:
+
+```
+def clusterDist(x, y):
+	if len(x) == len(y):
+		diff = []
+		for n in range(len(a)):
+			diff.append(sum([math.fabs(i - j) for i, j in zip(x[n], y[n])]))
+		return sum(diff)/2/len(x)
+	else:
+		return "mismatched size"
+```
+
+#### Changing number of clusters
+
+This metric can handle mismatched number of clusters in our clusterings. One can think of the contribution to the distance of adding a point to a cluster as `x*y` where `x` is the number of points in the cluster it is leaving, `y` is the number of points in the cluster it is joining. So, a point breaking into it's own cluster is `x`. 
 
 #### Examples of the distance
 E.g.
