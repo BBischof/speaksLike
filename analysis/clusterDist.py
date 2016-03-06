@@ -4,6 +4,22 @@ import math
 C_1 = {1: [1,2,3], 2: [4]}
 C_2 = {1: [1,2], 2: [3, 4]}
 C_3 = {1: [1,2], 2: [3], 3: [4]}
+Ugly = {1: ["apple","b"], 2: ["c"], 3: ["d"]}
+
+# for dictionaries that may not be as trivial as our dictionary format, this removes the 
+# names, and makes them simple integers
+def makeClusteringLabelless(D):
+	clusterDict = {}
+	labelsDict = {}
+	i = 1
+	for k in D.keys():
+		clusterDict[k] = []
+		for item in D[k]:
+			labelsDict[i] = item 
+			clusterDict[k].append(i)
+			i +=1
+	return labelsDict, clusterDict
+
 
 # Converts a partition of (1,...,n) indexed by a dictionary into an adjacency matrix
 def buildClusterMatrix(D, size=-1):
@@ -31,6 +47,8 @@ a = buildClusterMatrix(C_1)
 b = buildClusterMatrix(C_2)
 c = buildClusterMatrix(C_3)
 
-print clusterDist(a,b)
-print clusterDist(a,c)
-print clusterDist(b,c)
+# print clusterDist(a,b)
+# print clusterDist(a,c)
+# print clusterDist(b,c)
+
+print makeClusteringLabelless(Ugly)
