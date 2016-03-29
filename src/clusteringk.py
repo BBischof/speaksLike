@@ -41,19 +41,8 @@ class findk:
 		return np.array(sample)
 
 
-	def intraDist(self, labels, sample, k, centers):
-		"labels is the output from KMeans.labels, sample is list of vectors with distance to ith cluster center for on each observation"
-		"I think this actually just gives the inertia of the clustering..."
-		"""Dk = np.zeros(k)
-		#N = []
-		for i in range(k):
-			
-			points = [c for c, j in enumerate(labels) if j==i]  
-			#N.append(len(points))
-			for pt in points:
-				Dk[i] += sample[pt,i]**2
-
-		return np.log(sum(Dk))"""
+	def intraDist(self, labels, k, centers):
+		
 
 		Dk = np.zeros(k)
 		for i in range(k):			
@@ -80,17 +69,16 @@ class findk:
 			km = KMeans(n_clusters=k, init='k-means++', max_iter=max_iter, n_init=n_init)
 			Wkrand = []
 			for i in range(ref_size):
-				#Wkrand = []
 				km.fit(sample[i])
 				SS = km.transform(sample[i])
-				Wkrand.append((self.intraDist(km.labels_.tolist(), sample[i], k, km.cluster_centers_)))
+				Wkrand.append((self.intraDist(km.labels_.tolist(), k, km.cluster_centers_)))
 
 			Wkestrand[indk] = (1/ref_size)*sum(Wkrand)
 
 			km.fit(self.X)
 			XX = km.transform(self.X)
 			clusters = km.labels_.tolist()
-			Wk[indk] = self.intraDist(clusters, self.X, k, km.cluster_centers_)
+			Wk[indk] = self.intraDist(clusters, k, km.cluster_centers_)
 			sk[indk] = np.sqrt((1/ref_size)*sum([(Wkrand[i]-Wkestrand[indk])**2 for i in range(ref_size)]))
 
 		sk *= np.sqrt(1+1/ref_size)
