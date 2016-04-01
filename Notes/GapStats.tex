@@ -1,0 +1,189 @@
+
+\documentclass[10pt]{article}
+\usepackage{amssymb,amsmath,amscd}
+\usepackage{hyperref}
+
+\input epsf.tex
+
+
+\title{Understanding clustering of textual documents}
+
+
+
+\begin{document}
+\maketitle
+
+\newcommand{\op}[1]{\operatorname{#1}}
+
+
+\newcommand{\CC}{{\mathcal C}}
+
+\renewcommand{\O}{{\mathcal O}}
+
+\newcommand{\E}{{\mathcal E}}
+\newcommand{\F}{{\mathcal F}}
+
+\newcommand{\g}{{\mathfrak g}}
+\newcommand{\h}{{\mathfrak h}}
+
+\renewcommand{\k}{{\bf k}}
+\newcommand{\kk}{{\overline{\bf k}}}
+
+
+
+
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newenvironment{pf}{\paragraph{Proof}}{\qed\par\medskip}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{formula}[thm]{Formula}
+\newtheorem{thm*}[thm]{Theorem$^*$}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{remarks}[thm]{Remarks}
+\newtheorem{example}[thm]{Example}
+\newtheorem{examples}[thm]{Examples}\newtheorem{ass}[thm]{Assumptions}
+\newcommand {\A}{\mathcal A}
+
+%\newcommand{\pf}{\noindent{\sc Proof. }}
+\newcommand {\halmos}{\hfill{$\blacksquare$}}
+\newcommand{\D}{\operatorname{D}}
+\newcommand{\diam}{\diamond}
+\newcommand {\C}{\mathbb C}
+\newcommand {\ol}[1]{\overline{#1}}
+\newcommand {\IF}{\mathbb{F}}
+\newcommand {\Hom}{\operatorname{Hom}}
+\newcommand {\Aut}{\operatorname{Aut}}
+\newcommand {\Ext}{\operatorname{Ext}}
+\newcommand {\Rep}{\operatorname{Rep}}
+\renewcommand {\H}{\operatorname{\mathcal H}}
+\newcommand{\Vect}{\operatorname{Vect}}
+\newcommand {\id}{\operatorname{id}}
+%\newcommand {\cplx}[4]{#1\rightleftarrows^{#2}_{#3}#4}
+\newcommand{\cplx}[4] {\begin{xy}
+\xymatrix@=0pt@C=20pt@R=15pt{#1
+\ar@<.5ex>[r]^{#2}		& \ar@<.5ex>[l]^{#3}  #4}
+\end{xy}  }
+\newcommand{\mat}[4]{\begin{pmatrix}#1&#2\\#3&#4\end{pmatrix}}
+
+
+
+\newcommand{\cl}[1]{{\hat{#1}}}
+
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\gen}[1]{[#1]}
+\newcommand{\R}{{\operatorname{R}}}
+\newcommand{\lra}{\longrightarrow}
+
+\newcommand {\aand}{\qquad\text{and}\qquad}
+\newcommand {\comment}[1]{\footnote{#1}}
+\newcommand {\<}{\langle}
+\renewcommand {\>}{\rangle}
+\newcommand {\Omit}[1]{}
+\newcommand {\IP}{\mathbb{P}}
+\newcommand{\isom}{\cong}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\tensor}{\otimes}
+\renewcommand{\dag}{*}
+\newcommand{\fb}{\mathfrak{b}}
+\newcommand{\e}{\operatorname{e}}
+
+\newcommand{\Zt}{{\mathbb{Z}_2}}
+\newcommand{\Ho}{\operatorname{Ho}}
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\red}{\operatorname{red}}
+\newcommand{\n}{\mathfrak{n}}
+\newcommand{\blank}{\kern.0mm\smash{-}\kern.0mm}
+\newcommand{\blob}{{\scriptscriptstyle\bullet}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\K}{K}
+\newcommand{\into}{\hookrightarrow}
+\newcommand{\longinto}{\lhook\joinrel\longrightarrow}
+\newcommand{\rad}{\operatorname{rad}}
+\newcommand{\lRa}[1]{\stackrel{#1}{\lra}}
+
+\newcommand{\tw}{\operatorname{tw}}
+\newcommand{\Htw}{\H_{\tw}}
+%\newcommand{\red}{\operatorname{red}}
+\renewcommand{\DH}{\operatorname{\mathcal{DH}}}
+\newcommand{\DHred}{\operatorname{\mathcal{DH}_{red}}}
+\newcommand{\U}{\operatorname{U}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\Iso}{\operatorname{Iso}}
+
+
+
+\tableofcontents
+
+
+	\section*{Abstract} 
+	\section{Introduction}
+	\section{Gap statistics}
+	\section{Distribution for tf-idf vectors}
+	To compute the gap statistic, we need a random sample from the distribution with no clusters. Now we would want this distibution to be similar of the distribution of tf-idf vectors. It has been argued\cite{MKE} that the Dirichlet compound multinomial (DCM) distribution models the bag-of-words in textual documents. As the name suggests, DCM is a compound of Dirichlet and multinomial distributions. We will make this notion clear in the following. Before we delve into DCM, we will talk about multinomal and Dirichlet distributions. 
+
+
+\subsection{Multinomial Model}
+Multinomial distribution is a multivariate generalization of the binomial distribution. It models the counts of each of the p outcomes in n trials. e.g. consider the experiment of throwing a dice n times, this has 6 possible outcomes. A sample drawn from $Mult(n,6)$ is of the form $(x_1, x_2, \ldots, x_6)$ where each $x_i$ is the count of number of times the outcome was i. 
+As is pretty evident from the description that the count vectors for words in a document can be modelled by such a distribution. More specifically, a multinomial distribution can be used to model the probability of observing a given vector of word counts in a document. If $\theta_w$ is the probability of generating a word $w$, the the prob of generating a document $x$ can be expressed as - 
+\begin{equation}
+p(x|\theta) = \frac{n!}{\prod_{w=1}^W x_w!} \prod_{w=1}^W \theta_w^{x_w}
+\end{equation}
+where $\theta = (\theta_1, \theta_2, \ldots, \theta_W)$, $x_w$ is the frequency of word $w$ in the document, $W$ is the size of the vocabulary, and $n=\sum x_w$.\\
+$\theta$ is the parameter of the distribution, which can be approximated as follows\cite{MKE}:
+\begin{equation}
+\hat{\theta_w} = \frac{\sum_(d=1)^D x_{dw}}{\sum_w=1^W x_{dw}}
+\end{equation}
+where $d$ is the document number and $D$ is the total number of documents in the corpus. 
+
+\subsection{Dirichlet Model}
+Dirichlet distribution is a continous distribution which is the multivariate generalization of beta distribution. It is parameterized by a vector $\alpha$ containing real numbers. The Dirichlet distribution has the probability density function - 
+\begin{equation}
+p(\theta | \alpha) = \frac{\Gamma(\sum_{w=1}^W \alpha_w)}{\prod_{w=1}^W \Gamma(\alpha_w)} \prod_{w=1}^W \theta_w^{\alpha_w - 1}
+\end{equation}
+Dirichlet distribution can be used to model probabilities i.e. as a distributions over distributions. Thus $\theta$ is the above expression is a vector of probabilities.
+
+\subsection{Dirichlet Compound Multinomial (DCM) model}
+A DCM model of textual documents can be constructed hierarchically, exploiting the fact that Dirichlet distribution can describe probabilities. {\em In DCM model, the word-count vector for each document can be generated by a multinomial distribution whose parameters are generated by the Dirichlet distribution.} Thus to generate a sample from DCM,
+\begin{enumerate}
+\item Draw a sample from the Dirchlet distribution with parameter $\alpha$. This gives $\theta$.
+\item With this $\theta$ as parameter, get a sample from multinomial distribution to get the count vector $x=(x_w)$.
+\end{enumerate}
+This gives us word-count vectors, to generate sample representing tf-idf vectors, we apply appropriate transformation to the vectors thus generated. \\ 
+We followed the above steps to generate samples of vectors which are well-suited for the cluster-analysis. \\
+Mathematically, for DCM model
+\begin{equation}
+p(x| \alpha) = \int_{\theta} p(x| \theta) p(\theta | \alpha) d\theta
+\end{equation}
+The only parameter of the DCM model is $\alpha$ which can be approximated as 
+\begin{equation}
+\hat{\alpha_w} \simeq \frac{1}{D} \sum_{d=1}^D I(x_{dw} > 1)
+\end{equation}
+Since $x_{dw} = 0$ for most of the words in the vocabulary, $\alpha_w << 1$ for most words. Experiments involving training on popular data sets show the value to be less that 0.1.
+
+	\section{Computation of Gap statistics}
+	\section{Conlusion}
+	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{amsplain}
+\begin{thebibliography}{100}
+
+\bibitem{MKE} Rasmus E. Madsen, David Kauchak, Charles Elkan, Modeling Word Burstiness Using the Dirichlet Distribution, Proceedings of the 22 nd International Conference on Machine Learning, Bonn, Germany, 2005 \href{http://www.machinelearning.org/proceedings/icml2005/papers/069_WordBursting_MadsenEtAl.pdf}{(Online version)}
+\bibitem{Elkan} Charles Elkan, Deriving TF-IDF as a Fisher Kernel, M. Consens and G. Navarro (Eds.): SPIRE 2005, LNCS 3772, pp. 296–301, 2005. \href{http://cseweb.ucsd.edu/~elkan/papers/spire05.pdf}{(Online version)}
+
+
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}
