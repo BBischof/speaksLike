@@ -79,6 +79,11 @@ results = candSpeeches("input_directory")
 print results.compare("benchmark.txt")
 ```
 
+Usage of ```DCM.py```:
+To generate a sample point 
+```
+python DCM.py
+```
 ## Requirements:
 
 The following python packages are required:
