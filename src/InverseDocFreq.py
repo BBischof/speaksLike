@@ -3,6 +3,7 @@ Emperical computation of average IDF.
 """
 import os
 import numpy as np 
+import matplotlib.pyplot as plt
 
 
 
@@ -25,13 +26,15 @@ class InverseDocFreq:
 
 
 
-	def computeAverageIDF(self):
+	def computeNumberOfWordsAndIDF(self):
 		"""
-		Computes the averge IDF and the average number of words in a document.
+		Computes the IDF scores of words and the number of words in documents.
+		These results can be used for plotting.
 
 		Returns
 		-------
-		[Average number of words, average IDF]
+		A dictionary containing number of words in documents,  and average IDF of words.
+		{"number_of_words": number of words, "idf": idf values}
 		"""
 		vectorizer = TfidfVectorizer(min_df=min_df, stop_words='english')
 		X = vectorizer.fit_transform(self.text)
@@ -52,8 +55,34 @@ class InverseDocFreq:
 			words_in_rw = np.count_nonzero(rw)
 			number_of_words.append(words_in_rw)
 
-		return [np.mean(number_of_words), np.mean(idf_vec)]
+		res_data = {"number_of_words": number_of_words, "idf": idf_vec}
+		return res_data
 
+
+
+
+	def computeAvergeNumberOfWordsAndIDF(self):
+		"""
+		Computes averge IDF and averge number of words in a document.
+		This information will be used in computation of the DCM model.
+
+		Returns
+		-------
+		[(Average number of words in a doc, variance), (Average IDF score of a word, variance)]
+		"""
+		out = self.computeNumberOfWordsAndIDF()
+		number_of_words = out['number_of_words']
+		idf_vec = out['idf']
+
+		return [(np.mean(number_of_words), np.var(number_of_words)), (np.mean(idf_vec), np.var(idf_vec))]
+
+
+# s = np.random.normal(0,0.1, 1000))
+# count, bins, ignored = plt.hist(s, 30, normed=True)
+# plt.plot(bins, 1/(0.1 * np.sqrt(2 * np.pi)) *
+# 		np.exp( - (bins - 0)**2 / (2 * 0.1**2) ),
+# 		linewidth=2, color='r')
+# plt.show()
 
 
 
